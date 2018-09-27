@@ -6,7 +6,7 @@
 
     @include('includes.form_errors')
 
-    {!! Form::open(['method' => 'post', 'action' => 'AdminUsersController@store', 'files' => true]) !!}
+    {{ Form::open(['method' => 'post', 'action' => 'AdminUsersController@store', 'files' => true]) }}
 
     <div class="form-group">
         {{ Form::label('name', 'Name:') }}
@@ -42,6 +42,6 @@
         {{ Form::submit('Create User', ['class' => 'btn btn-primary']) }}
     </div>
 
-    {!! Form::close() !!}
+    {{ Form::close() }}
 
 @endsection
