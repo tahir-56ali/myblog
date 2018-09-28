@@ -42,7 +42,7 @@ class AdminUsersController extends Controller
      */
     public function store(UsersRequest $request)
     {
-        $input = $request->all();
+        $input = $this->encryptPassword($request);
 
         if ($file = $request->file('photo_id')) {
 
@@ -52,9 +52,6 @@ class AdminUsersController extends Controller
             $photo = Photos::create(['file' => $name]);
             $input['photo_id'] = $photo->id;
         }
-
-        # encrypt password
-        $input['password'] = bcrypt($request->password);
 
         User::create($input);
 
@@ -95,22 +92,16 @@ class AdminUsersController extends Controller
     public function update(UsersEditRequest $request, $id)
     {
         $user = User::findOrFail($id);
-        $input = $request->all();
+        $input = $this->encryptPassword($request);
 
         if ($file = $request->file('photo_id')) {
-            $name = time().$file->getClientOriginalName();
+            $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
             # inserting in photos table
-            $photo = Photos::create(['file'=>$name]);
+            $photo = Photos::create(['file' => $name]);
             $input['photo_id'] = $photo->id;
         }
 
-        # encrypt password
-        if ($request->password) {
-            $input['password'] = bcrypt($request->password);
-        } else {
-            unset($input['password']);
-        }
         $user->update($input);
 
         return redirect('/admin/users');
@@ -125,5 +116,17 @@ class AdminUsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function encryptPassword($request)
+    {
+        if (trim($request->password) == '') {
+            $input = $request->except('password');
+        } else {
+            $input = $request->all();
+            # encrypt password
+            $input['password'] = bcrypt($request->password);
+        }
+        return $input;
     }
 }
