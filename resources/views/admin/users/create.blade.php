@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Create Users</h1>
+    <h1>Create User</h1>
 
     @include('includes.form_errors')
 
