@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\Photos;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPostsController extends Controller
 {
@@ -26,7 +29,8 @@ class AdminPostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::pluck('name', 'id')->all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -37,7 +41,25 @@ class AdminPostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $validatedData = $request->validate([
+            'title' => 'required|unique:posts|max:255',
+            'category_id' => 'required',
+            'photo_id' => 'required',
+            'body' => 'required',
+        ]);
+
+        if ($file = $request->file('photo_id')) {
+            $name = time() . $file->getClientOriginalName();
+            $file->move('images', $name);
+            $photo = Photos::create(['file' => $name]);
+            $validatedData['photo_id'] = $photo->id;
+        }
+
+        $user->posts()->create($validatedData);
+
+        return redirect('/admin/posts');
     }
 
     /**

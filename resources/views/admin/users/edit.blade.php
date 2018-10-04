@@ -51,14 +51,14 @@
             </div>
 
             <div class="form-group">
-                {{ Form::submit('Update User', ['class' => 'btn btn-primary col-sm-4']) }}
+                {{ Form::submit('Update User', ['class' => 'btn btn-primary col-sm-6']) }}
             </div>
 
             {{ Form::close() }}
 
-            {{ Form::open(['method' => 'delete', 'action' => ['AdminUsersController@destroy', $user->id], 'class' => 'pull-right']) }}
+            {{ Form::open(['method' => 'delete', 'action' => ['AdminUsersController@destroy', $user->id]]) }}
                     <div class="form-group">
-                        {{ Form::submit('Delete User', ['class' => 'btn btn-danger col-sm-4']) }}
+                        {{ Form::submit('Delete User', ['class' => 'btn btn-danger col-sm-6']) }}
                     </div>
             {{ Form::close() }}
 
