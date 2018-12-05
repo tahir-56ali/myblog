@@ -11,7 +11,9 @@
 |
 */
 
+use App\Photos;
 use App\Post;
+use App\User;
 use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
@@ -22,8 +24,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/admin', function(){
-   return view('admin.index');
+Route::get('/admin', function () {
+    return view('admin.index');
 });
 
 Route::group(['middleware' => 'admin'], function () {
@@ -90,23 +92,35 @@ Route::get('/findmore', function () {
 
 /*Eloquent ORM soft delete*/
 Route::get('/softdelete', function () {
-    Post::find(1)->delete();
+    Post::find(5)->delete();
 });
 
 /*Eloquent ORM read soft deletes*/
-Route::get('/readsoftdeletes', function() {
-   //$posts = Post::withTrashed()->get(); // all posts with including trashed as well
+Route::get('/readsoftdeletes', function () {
+    //$posts = Post::withTrashed()->get(); // all posts with including trashed as well
     $posts = Post::onlyTrashed()->get(); // only trashed posts
-   return $posts;
+    return $posts;
 });
 
 /*Eloquent ORM restore soft deletes*/
-Route::get('/restore', function() {
-   //Post::withTrashed()->restore(); // restore all trashed posts
+Route::get('/restoresoftdelete', function () {
+    //Post::onlyTrashed()->restore(); // restore all trashed posts
     Post::where('id', 1)->restore(); // restore particular post
 });
 
 /*Eloquent ORM force delete (permanently)*/
-Route::get('/forcedelete', function() {
+Route::get('/forcedelete', function () {
     Post::onlyTrashed()->where('user_id', 1)->forceDelete();
+});
+
+/*Eloquent ORM one to one relationship */
+Route::get('/user/{id}/photo', function ($id) {
+    $user = User::find($id);
+    return $user->photo;
+});
+
+/*Eloquent ORM one to one inverse relationship */
+Route::get('/post/{id}/user', function ($id) {
+    $post = Post::find($id);
+    return $post->user;
 });
