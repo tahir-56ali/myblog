@@ -124,3 +124,20 @@ Route::get('/post/{id}/user', function ($id) {
     $post = Post::find($id);
     return $post->user;
 });
+
+/*Eloquent ORM one to many relationship */
+Route::get('/user/{id}/posts', function ($id) {
+    $user = User::find($id);
+    foreach ($user->posts as $post) {
+        echo $post->title . '<br>';
+    }
+});
+
+/*Eloquent ORM many to many relationship */
+Route::get('/user/{id}/roles', function($id) {
+   $user = User::find($id)->roles()->orderby('id', 'asc')->get();
+   return $user;
+   foreach ($user->roles as $role) {
+       echo $role->name . '<br>';
+   }
+});
