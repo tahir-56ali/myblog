@@ -134,10 +134,19 @@ Route::get('/user/{id}/posts', function ($id) {
 });
 
 /*Eloquent ORM many to many relationship */
-Route::get('/user/{id}/roles', function($id) {
-   $user = User::find($id)->roles()->orderby('id', 'asc')->get();
-   return $user;
-   foreach ($user->roles as $role) {
-       echo $role->name . '<br>';
-   }
+Route::get('/user/{id}/roles', function ($id) {
+    $user = User::find($id)->roles()->orderby('id', 'asc')->get();
+    return $user;
+    foreach ($user->roles as $role) {
+        echo $role->name . '<br>';
+    }
+});
+
+/*Eloquent ORM querying pivot/intermediate table */
+Route::get('/user/pivot', function () {
+    $user = User::find(1);
+
+    foreach ($user->roles as $role) {
+        echo $role->pivot->created_at . '<br>';
+    }
 });
