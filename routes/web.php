@@ -11,6 +11,7 @@
 |
 */
 
+use App\Country;
 use App\Photos;
 use App\Post;
 use App\User;
@@ -148,5 +149,14 @@ Route::get('/user/pivot', function () {
 
     foreach ($user->roles as $role) {
         echo $role->pivot->created_at . '<br>';
+    }
+});
+
+/*Eloquent ORM Has Many Through relation */
+Route::get('/user/country', function () {
+    $country = Country::find(2);
+
+    foreach ($country->posts as $post) {
+        return $post->title;
     }
 });
