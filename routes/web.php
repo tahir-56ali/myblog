@@ -15,6 +15,7 @@ use App\Country;
 use App\Photos;
 use App\Post;
 use App\User;
+use App\UserPosts;
 use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
@@ -158,5 +159,23 @@ Route::get('/user/country', function () {
 
     foreach ($country->posts as $post) {
         return $post->title;
+    }
+});
+
+/* Eloquent ORM Polymorphic relation */
+Route::get('/user/{id}/photos', function ($id) {
+    $user = User::find($id);
+
+    foreach ($user->photos as $photo) {
+        echo $photo->path . '<br>';
+    }
+});
+
+/* Eloquent ORM Polymorphic relation */
+Route::get('/post/{id}/photos', function ($id) {
+    $userPosts = UserPosts::find($id);
+
+    foreach ($userPosts->photos as $photo) {
+        echo $photo->path . '<br>';
     }
 });
