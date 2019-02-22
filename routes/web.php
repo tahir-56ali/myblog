@@ -187,3 +187,12 @@ Route::get('/userphotos/{id}', function ($id) {
     return $userPhoto->imageable;
 
 });
+
+/* Eloquent ORM Polymorphic many to many relationship */
+Route::get('/userposts/{id}', function ($id) {
+    $userPosts = UserPosts::findOrFail($id);
+
+    foreach ($userPosts->tags as $tag) {
+        return $tag;
+    }
+});
