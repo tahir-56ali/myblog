@@ -196,3 +196,7 @@ Route::get('/userposts/{id}', function ($id) {
         return $tag;
     }
 });
+
+Route::get('/testing', function() {
+    return 'testing';
+});
