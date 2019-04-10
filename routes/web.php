@@ -198,5 +198,6 @@ Route::get('/userposts/{id}', function ($id) {
 });
 
 Route::get('/testing', function() {
+
     return 'testing';
 });
